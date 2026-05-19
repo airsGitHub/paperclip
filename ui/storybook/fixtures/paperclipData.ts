@@ -110,6 +110,7 @@ export const storybookAuthSession: AuthSession = {
     name: "Riley Board",
     email: "riley@paperclip.local",
     image: null,
+    language: "en",
   },
 };
 

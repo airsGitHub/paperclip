@@ -7,6 +7,7 @@ import {
 } from "../constants.js";
 import { agentAdapterTypeSchema } from "../adapter-type.js";
 import { envConfigSchema } from "./secret.js";
+import { supportedUserLanguages } from "./access.js";
 
 export const agentPermissionsSchema = z.object({
   canCreateAgents: z.boolean().optional().default(false),
@@ -79,6 +80,7 @@ export const createAgentSchema = z.object({
   budgetMonthlyCents: z.number().int().nonnegative().optional().default(0),
   permissions: agentPermissionsSchema.optional(),
   metadata: z.record(z.string(), z.unknown()).optional().nullable(),
+  language: z.enum(supportedUserLanguages).optional().default("en"),
 });
 
 export type CreateAgent = z.infer<typeof createAgentSchema>;

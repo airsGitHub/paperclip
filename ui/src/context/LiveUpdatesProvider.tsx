@@ -14,6 +14,7 @@ import { clearIssueExecutionRun, removeLiveRunById } from "../lib/optimistic-iss
 import { queryKeys } from "../lib/queryKeys";
 import { toCompanyRelativePath } from "../lib/company-routes";
 import { useLocation } from "../lib/router";
+import { i18n } from "../i18n";
 
 const TOAST_COOLDOWN_WINDOW_MS = 10_000;
 const TOAST_COOLDOWN_MAX = 3;
@@ -951,6 +952,13 @@ export function LiveUpdatesProvider({ children }: { children: ReactNode }) {
       agentId: null,
     };
   }, [currentUserId]);
+
+  useEffect(() => {
+    const lang = session?.user?.language;
+    if (lang && i18n.language !== lang) {
+      void i18n.changeLanguage(lang);
+    }
+  }, [session?.user?.language]);
 
   useEffect(() => {
     if (!canConnectSocket || !liveCompanyId) return;

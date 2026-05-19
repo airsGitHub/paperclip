@@ -169,11 +169,14 @@ const profileImageSchema = z
   .max(4000)
   .refine(isValidProfileImage, { message: "Invalid profile image URL" });
 
+export const supportedUserLanguages = ["en", "zh-CN", "ja-JP"] as const;
+
 export const currentUserProfileSchema = z.object({
   id: z.string().min(1),
   email: z.string().email().nullable(),
   name: z.string().min(1).max(120).nullable(),
   image: profileImageSchema.nullable(),
+  language: z.enum(supportedUserLanguages).default("en"),
 });
 
 export type CurrentUserProfile = z.infer<typeof currentUserProfileSchema>;
@@ -189,11 +192,12 @@ export const authSessionSchema = z.object({
 export type AuthSession = z.infer<typeof authSessionSchema>;
 
 export const updateCurrentUserProfileSchema = z.object({
-  name: z.string().trim().min(1).max(120),
+  name: z.string().trim().min(1).max(120).optional(),
   image: z
     .union([profileImageSchema, z.literal(""), z.null()])
     .optional()
     .transform((value) => value === "" ? null : value),
+  language: z.enum(supportedUserLanguages).optional(),
 });
 
 export type UpdateCurrentUserProfile = z.infer<typeof updateCurrentUserProfileSchema>;

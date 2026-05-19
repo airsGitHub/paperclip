@@ -11,6 +11,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { i18n } from "@/i18n";
 
 function deriveInitials(name: string) {
   const parts = name.trim().split(/\s+/).filter(Boolean);
@@ -26,6 +28,7 @@ export function ProfileSettings() {
   const avatarInputRef = useRef<HTMLInputElement | null>(null);
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
+  const [language, setLanguage] = useState<"en" | "zh-CN" | "ja-JP">("en");
   const [actionError, setActionError] = useState<string | null>(null);
   const sessionQuery = useQuery({
     queryKey: queryKeys.auth.session,
@@ -45,6 +48,7 @@ export function ProfileSettings() {
     if (!session) return;
     setName(session.user.name ?? "");
     setImage(session.user.image ?? "");
+    setLanguage(session.user.language ?? "en");
   }, [sessionQuery.data]);
 
   function syncSessionProfile(profile: CurrentUserProfile) {
@@ -76,6 +80,10 @@ export function ProfileSettings() {
       setActionError(null);
       setName(profile.name ?? "");
       setImage(profile.image ?? "");
+      setLanguage(profile.language ?? "en");
+      if (profile.language) {
+        void i18n.changeLanguage(profile.language);
+      }
     },
     onError: (error) => {
       setActionError(error instanceof Error ? error.message : "Failed to update profile.");
@@ -230,7 +238,7 @@ export function ProfileSettings() {
           className="grid gap-6 md:grid-cols-2"
           onSubmit={(event) => {
             event.preventDefault();
-            updateMutation.mutate({ name: resolveProfileName(), image: image.trim() || null });
+            updateMutation.mutate({ name: resolveProfileName(), image: image.trim() || null, language });
           }}
         >
           <div className="space-y-2">
@@ -257,6 +265,26 @@ export function ProfileSettings() {
             />
             <p className="text-xs text-muted-foreground">
               Email is managed by your auth session and is read-only here.
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="profile-language">Language</Label>
+            <Select
+              value={language}
+              onValueChange={(value) => setLanguage(value as "en" | "zh-CN" | "ja-JP")}
+            >
+              <SelectTrigger id="profile-language">
+                <SelectValue placeholder="Select language" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="en">English</SelectItem>
+                <SelectItem value="zh-CN">中文 (简体)</SelectItem>
+                <SelectItem value="ja-JP">日本語</SelectItem>
+              </SelectContent>
+            </Select>
+            <p className="text-xs text-muted-foreground">
+              Controls the language of the board interface.
             </p>
           </div>
 
