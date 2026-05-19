@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { i18n } from "@/i18n";
+import { useTranslation, i18n } from "@/i18n";
 
 function deriveInitials(name: string) {
   const parts = name.trim().split(/\s+/).filter(Boolean);
@@ -21,6 +21,7 @@ function deriveInitials(name: string) {
 }
 
 export function ProfileSettings() {
+  const { t } = useTranslation();
   const { setBreadcrumbs } = useBreadcrumbs();
   const { selectedCompanyId, selectedCompany } = useCompany();
   const queryClient = useQueryClient();
@@ -38,8 +39,8 @@ export function ProfileSettings() {
 
   useEffect(() => {
     setBreadcrumbs([
-      { label: "Instance Settings" },
-      { label: "Profile" },
+      { label: t("nav.settings") },
+      { label: t("common.profile") },
     ]);
   }, [setBreadcrumbs]);
 
@@ -86,7 +87,7 @@ export function ProfileSettings() {
       }
     },
     onError: (error) => {
-      setActionError(error instanceof Error ? error.message : "Failed to update profile.");
+      setActionError(error instanceof Error ? error.message : t("profile.saveProfile"));
     },
   });
 
@@ -150,10 +151,10 @@ export function ProfileSettings() {
       <div className="space-y-2">
         <div className="flex items-center gap-2">
           <UserRoundPen className="h-5 w-5 text-muted-foreground" />
-          <h1 className="text-lg font-semibold">Profile</h1>
+          <h1 className="text-lg font-semibold">{t("common.profile")}</h1>
         </div>
         <p className="text-sm text-muted-foreground">
-          Control how your account appears in the sidebar and other board surfaces.
+          t("profile.nameHint")
         </p>
       </div>
 
@@ -205,7 +206,7 @@ export function ProfileSettings() {
                     disabled={!selectedCompanyId || isSavingProfile}
                   >
                     {uploadAvatarMutation.isPending ? <LoaderCircle className="size-4 animate-spin" /> : <Camera className="size-4" />}
-                    {currentImage ? "Change photo" : "Upload photo"}
+                    {currentImage ? t("profile.changePhoto") : t("profile.uploadPhoto")}
                   </Button>
                   {currentImage ? (
                     <Button
@@ -251,7 +252,7 @@ export function ProfileSettings() {
               placeholder="Board"
             />
             <p className="text-xs text-muted-foreground">
-              Shown in the sidebar account footer and comment author surfaces.
+              t("profile.nameHint")
             </p>
           </div>
 
@@ -264,7 +265,7 @@ export function ProfileSettings() {
               disabled
             />
             <p className="text-xs text-muted-foreground">
-              Email is managed by your auth session and is read-only here.
+              t("profile.emailReadOnly")
             </p>
           </div>
 
@@ -284,7 +285,7 @@ export function ProfileSettings() {
               </SelectContent>
             </Select>
             <p className="text-xs text-muted-foreground">
-              Controls the language of the board interface.
+              t("profile.languageHint")
             </p>
           </div>
 

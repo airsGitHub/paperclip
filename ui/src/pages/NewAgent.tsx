@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useSearchParams } from "@/lib/router";
 import { useCompany } from "../context/CompanyContext";
+import { useTranslation } from "@/i18n";
 import { useBreadcrumbs } from "../context/BreadcrumbContext";
 import { agentsApi } from "../api/agents";
 import { companySkillsApi } from "../api/companySkills";
@@ -63,6 +64,7 @@ function createValuesForAdapterType(
 }
 
 export function NewAgent() {
+  const { t } = useTranslation();
   const { selectedCompanyId } = useCompany();
   const { setBreadcrumbs } = useBreadcrumbs();
   const queryClient = useQueryClient();
@@ -200,7 +202,7 @@ export function NewAgent() {
       <div>
         <h1 className="text-lg font-semibold">New Agent</h1>
         <p className="text-sm text-muted-foreground mt-1">
-          Advanced agent configuration
+          t("agents.advancedConfig")
         </p>
       </div>
 
@@ -209,7 +211,7 @@ export function NewAgent() {
         <div className="px-4 pt-4 pb-2">
           <input
             className="w-full text-lg font-semibold bg-transparent outline-none placeholder:text-muted-foreground/50"
-            placeholder="Agent name"
+            placeholder={t("agents.agentName")}
             value={name}
             onChange={(e) => setName(e.target.value)}
             autoFocus
@@ -220,7 +222,7 @@ export function NewAgent() {
         <div className="px-4 pb-2">
           <input
             className="w-full bg-transparent outline-none text-sm text-muted-foreground placeholder:text-muted-foreground/40"
-            placeholder="Title (e.g. VP of Engineering)"
+            placeholder={t("agents.titlePlaceholder")}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
