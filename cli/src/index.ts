@@ -26,14 +26,14 @@ import { registerWorktreeCommands } from "./commands/worktree.js";
 import { registerPluginCommands } from "./commands/client/plugin.js";
 import { registerClientAuthCommands } from "./commands/client/auth.js";
 import { cliVersion } from "./version.js";
+import { t } from "./i18n/index.js";
 
 const program = new Command();
-const DATA_DIR_OPTION_HELP =
-  "Paperclip data directory root (isolates state from ~/.paperclip)";
+const DATA_DIR_OPTION_HELP = t("opt_data_dir_help");
 
 program
   .name("paperclipai")
-  .description("Paperclip CLI — setup, diagnose, and configure your instance")
+  .description(t("cli_desc"))
   .version(cliVersion);
 
 program.hook("preAction", (_thisCommand, actionCommand) => {
@@ -49,7 +49,7 @@ program.hook("preAction", (_thisCommand, actionCommand) => {
 
 program
   .command("onboard")
-  .description("Interactive first-run setup wizard")
+  .description(t("cmd_onboard_desc"))
   .option("-c, --config <path>", "Path to config file")
   .option("-d, --data-dir <path>", DATA_DIR_OPTION_HELP)
   .option("--bind <mode>", "Quickstart reachability preset (loopback, lan, tailnet)")
@@ -59,7 +59,7 @@ program
 
 program
   .command("doctor")
-  .description("Run diagnostic checks on your Paperclip setup")
+  .description(t("cmd_doctor_desc"))
   .option("-c, --config <path>", "Path to config file")
   .option("-d, --data-dir <path>", DATA_DIR_OPTION_HELP)
   .option("--repair", "Attempt to repair issues automatically")
@@ -71,14 +71,14 @@ program
 
 program
   .command("env")
-  .description("Print environment variables for deployment")
+  .description(t("cmd_env_desc"))
   .option("-c, --config <path>", "Path to config file")
   .option("-d, --data-dir <path>", DATA_DIR_OPTION_HELP)
   .action(envCommand);
 
 program
   .command("configure")
-  .description("Update configuration sections")
+  .description(t("cmd_configure_desc"))
   .option("-c, --config <path>", "Path to config file")
   .option("-d, --data-dir <path>", DATA_DIR_OPTION_HELP)
   .option("-s, --section <section>", "Section to configure (llm, database, logging, server, storage, secrets)")
@@ -86,7 +86,7 @@ program
 
 program
   .command("db:backup")
-  .description("Create a one-off database backup using current config")
+  .description(t("cmd_db_backup_desc"))
   .option("-c, --config <path>", "Path to config file")
   .option("-d, --data-dir <path>", DATA_DIR_OPTION_HELP)
   .option("--dir <path>", "Backup output directory (overrides config)")
@@ -99,7 +99,7 @@ program
 
 program
   .command("allowed-hostname")
-  .description("Allow a hostname for authenticated/private mode access")
+  .description(t("cmd_allowed_hostname_desc"))
   .argument("<host>", "Hostname to allow (for example dotta-macbook-pro)")
   .option("-c, --config <path>", "Path to config file")
   .option("-d, --data-dir <path>", DATA_DIR_OPTION_HELP)
@@ -107,7 +107,7 @@ program
 
 program
   .command("run")
-  .description("Bootstrap local setup (onboard + doctor) and run Paperclip")
+  .description(t("cmd_run_desc"))
   .option("-c, --config <path>", "Path to config file")
   .option("-d, --data-dir <path>", DATA_DIR_OPTION_HELP)
   .option("-i, --instance <id>", "Local instance id (default: default)")
@@ -116,11 +116,11 @@ program
   .option("--no-repair", "Disable automatic repairs during doctor")
   .action(runCommand);
 
-const heartbeat = program.command("heartbeat").description("Heartbeat utilities");
+const heartbeat = program.command("heartbeat").description(t("cmd_heartbeat_desc"));
 
 heartbeat
   .command("run")
-  .description("Run one agent heartbeat and stream live logs")
+  .description(t("cmd_heartbeat_run_desc"))
   .requiredOption("-a, --agent-id <agentId>", "Agent ID to invoke")
   .option("-c, --config <path>", "Path to config file")
   .option("-d, --data-dir <path>", DATA_DIR_OPTION_HELP)
@@ -153,11 +153,11 @@ registerWorktreeCommands(program);
 registerEnvLabCommands(program);
 registerPluginCommands(program);
 
-const auth = program.command("auth").description("Authentication and bootstrap utilities");
+const auth = program.command("auth").description(t("cmd_auth_desc"));
 
 auth
   .command("bootstrap-ceo")
-  .description("Create a one-time bootstrap invite URL for first instance admin")
+  .description(t("cmd_auth_bootstrap_ceo_desc"))
   .option("-c, --config <path>", "Path to config file")
   .option("-d, --data-dir <path>", DATA_DIR_OPTION_HELP)
   .option("--force", "Create new invite even if admin already exists", false)

@@ -16,6 +16,7 @@ import {
 } from "../checks/index.js";
 import { loadPaperclipEnvFile } from "../config/env.js";
 import { printPaperclipCliBanner } from "../utils/banner.js";
+import { t } from "../i18n/index.js";
 
 const STATUS_ICON = {
   pass: pc.green("✓"),
@@ -29,7 +30,7 @@ export async function doctor(opts: {
   yes?: boolean;
 }): Promise<{ passed: number; warned: number; failed: number }> {
   printPaperclipCliBanner();
-  p.intro(pc.bgCyan(pc.black(" paperclip doctor ")));
+  p.intro(pc.bgCyan(pc.black(t("doctor_title"))));
 
   const configPath = resolveConfigPath(opts.config);
   loadPaperclipEnvFile(configPath);
@@ -49,11 +50,11 @@ export async function doctor(opts: {
     config = readConfig(opts.config)!;
   } catch (err) {
     const readResult: CheckResult = {
-      name: "Config file",
+      name: t("check_name_config_file"),
       status: "fail",
-      message: `Could not read config: ${err instanceof Error ? err.message : String(err)}`,
+      message: t("cfg_msg_read_error", { msg: err instanceof Error ? err.message : String(err) }),
       canRepair: false,
-      repairHint: "Run `paperclipai configure --section database` or `paperclipai onboard`",
+      repairHint: t("cfg_repair_hint"),
     };
     results.push(readResult);
     printResult(readResult);
@@ -142,7 +143,7 @@ async function maybeRepair(
   let shouldRepair = opts.yes;
   if (!shouldRepair) {
     const answer = await p.confirm({
-      message: `Repair "${result.name}"?`,
+      message: t("doctor_repair_prompt", { name: result.name }),
       initialValue: true,
     });
     if (p.isCancel(answer)) return false;
@@ -152,10 +153,10 @@ async function maybeRepair(
   if (shouldRepair) {
     try {
       await result.repair();
-      p.log.success(`Repaired: ${result.name}`);
+      p.log.success(t("doctor_repaired", { name: result.name }));
       return true;
     } catch (err) {
-      p.log.error(`Repair failed: ${err instanceof Error ? err.message : String(err)}`);
+      p.log.error(t("doctor_repair_failed", { msg: err instanceof Error ? err.message : String(err) }));
     }
   }
   return false;
@@ -189,14 +190,14 @@ function printSummary(results: CheckResult[]): { passed: number; warned: number;
   if (warned) parts.push(pc.yellow(`${warned} warnings`));
   if (failed) parts.push(pc.red(`${failed} failed`));
 
-  p.note(parts.join(", "), "Summary");
+  p.note(parts.join(", "), t("doctor_summary_note"));
 
   if (failed > 0) {
-    p.outro(pc.red("Some checks failed. Fix the issues above and re-run doctor."));
+    p.outro(pc.red(t("doctor_outro_failed")));
   } else if (warned > 0) {
-    p.outro(pc.yellow("All critical checks passed with some warnings."));
+    p.outro(pc.yellow(t("doctor_outro_warned")));
   } else {
-    p.outro(pc.green("All checks passed!"));
+    p.outro(pc.green(t("doctor_outro_passed")));
   }
 
   return { passed, warned, failed };

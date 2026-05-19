@@ -9,7 +9,9 @@ const PAPERCLIP_ART = [
   "╚═╝     ╚═╝  ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝ ╚═════╝╚══════╝╚═╝╚═╝     ",
 ] as const;
 
-const TAGLINE = "Open-source orchestration for zero-human companies";
+import { t } from "../i18n/index.js";
+
+const TAGLINE = t("tagline");
 
 export function printPaperclipCliBanner(): void {
   const lines = [
