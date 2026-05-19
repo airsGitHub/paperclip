@@ -3,6 +3,7 @@ import { Link, useLocation } from "@/lib/router";
 import { AlertTriangle, Compass } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useBreadcrumbs } from "../context/BreadcrumbContext";
+import { t } from "@/i18n";
 import { useCompany } from "../context/CompanyContext";
 
 type NotFoundScope = "board" | "invalid_company_prefix" | "global";
@@ -57,7 +58,7 @@ export function NotFoundPage({ scope = "global", requestedPrefix }: NotFoundPage
             </Link>
           </Button>
           <Button variant="outline" asChild>
-            <Link to="/">Go home</Link>
+            <Link to="/">{t("notFound.go_home")}</Link>
           </Button>
         </div>
       </div>

@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useTranslation, i18n } from "@/i18n";
+import { t } from "@/i18n";
 
 function deriveInitials(name: string) {
   const parts = name.trim().split(/\s+/).filter(Boolean);
@@ -21,7 +22,6 @@ function deriveInitials(name: string) {
 }
 
 export function ProfileSettings() {
-  const { t } = useTranslation();
   const { setBreadcrumbs } = useBreadcrumbs();
   const { selectedCompanyId, selectedCompany } = useCompany();
   const queryClient = useQueryClient();
@@ -243,13 +243,13 @@ export function ProfileSettings() {
           }}
         >
           <div className="space-y-2">
-            <Label htmlFor="profile-name">Display name</Label>
+            <Label htmlFor="profile-name">{t("profile.displayName")}</Label>
             <Input
               id="profile-name"
               value={name}
               onChange={(event) => setName(event.target.value)}
               maxLength={120}
-              placeholder="Board"
+              placeholder={t("profileSettings.board")}
             />
             <p className="text-xs text-muted-foreground">
               t("profile.nameHint")
@@ -257,7 +257,7 @@ export function ProfileSettings() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="profile-email">Email</Label>
+            <Label htmlFor="profile-email">{t("profile.email")}</Label>
             <Input
               id="profile-email"
               value={sessionQuery.data.user.email ?? ""}
@@ -270,16 +270,16 @@ export function ProfileSettings() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="profile-language">Language</Label>
+            <Label htmlFor="profile-language">{t("common.language")}</Label>
             <Select
               value={language}
               onValueChange={(value) => setLanguage(value as "en" | "zh-CN" | "ja-JP")}
             >
               <SelectTrigger id="profile-language">
-                <SelectValue placeholder="Select language" />
+                <SelectValue placeholder={t("profileSettings.select_language")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="en">English</SelectItem>
+                <SelectItem value="en">{t("profileSettings.english")}</SelectItem>
                 <SelectItem value="zh-CN">中文 (简体)</SelectItem>
                 <SelectItem value="ja-JP">日本語</SelectItem>
               </SelectContent>

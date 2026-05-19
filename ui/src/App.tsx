@@ -1,3 +1,4 @@
+import * as React from "react";
 import { Navigate, Outlet, Route, Routes, useLocation, useParams } from "@/lib/router";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "@/i18n";
@@ -268,8 +269,9 @@ function NoCompaniesStartPage() {
 }
 
 export function App() {
+  const { i18n } = useTranslation();
   return (
-    <>
+    <React.Fragment key={i18n.language}>
       <Routes>
         <Route path="auth" element={<AuthPage />} />
         <Route path="board-claim/:token" element={<BoardClaimPage />} />
@@ -328,6 +330,6 @@ export function App() {
         </Route>
       </Routes>
       <OnboardingWizard />
-    </>
+    </React.Fragment>
   );
 }

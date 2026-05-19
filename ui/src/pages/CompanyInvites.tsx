@@ -9,6 +9,7 @@ import { useCompany } from "@/context/CompanyContext";
 import { useToast } from "@/context/ToastContext";
 import { Link } from "@/lib/router";
 import { queryKeys } from "@/lib/queryKeys";
+import { t } from "@/i18n";
 
 const inviteRoleOptions = [
   {
@@ -173,7 +174,7 @@ export function CompanyInvites() {
       <div className="space-y-3">
         <div className="flex items-center gap-2">
           <MailPlus className="h-5 w-5 text-muted-foreground" />
-          <h1 className="text-lg font-semibold">Company Invites</h1>
+          <h1 className="text-lg font-semibold">{t("companyInvites.company_invites")}</h1>
         </div>
         <p className="max-w-3xl text-sm text-muted-foreground">
           Create human invite links for company access. New invite links are copied to your clipboard when they are generated.
@@ -182,14 +183,14 @@ export function CompanyInvites() {
 
       <section className="space-y-4 rounded-xl border border-border p-5">
         <div className="space-y-1">
-          <h2 className="text-sm font-semibold">Create invite</h2>
+          <h2 className="text-sm font-semibold">{t("companyInvites.create_invite")}</h2>
           <p className="text-sm text-muted-foreground">
             Generate a human invite link and choose the default access it should request.
           </p>
         </div>
 
         <fieldset className="space-y-3">
-          <legend className="text-sm font-medium">Choose a role</legend>
+          <legend className="text-sm font-medium">{t("companyInvites.choose_a_role")}</legend>
           <div className="rounded-xl border border-border">
             {inviteRoleOptions.map((option, index) => {
               const checked = humanRole === option.value;
@@ -239,7 +240,7 @@ export function CompanyInvites() {
           <div className="space-y-3 rounded-lg border border-border px-4 py-4">
             <div className="space-y-1">
               <div className="flex items-center justify-between gap-3">
-                <div className="text-sm font-medium">Latest invite link</div>
+                <div className="text-sm font-medium">{t("companyInvites.latest_invite_link")}</div>
                 {latestInviteCopied ? (
                   <div className="inline-flex items-center gap-1 text-xs font-medium text-foreground">
                     <Check className="h-3.5 w-3.5" />
@@ -276,7 +277,7 @@ export function CompanyInvites() {
       <section className="rounded-xl border border-border">
         <div className="flex flex-wrap items-center justify-between gap-4 px-5 py-4">
           <div className="space-y-1">
-            <h2 className="text-sm font-semibold">Invite history</h2>
+            <h2 className="text-sm font-semibold">{t("companyInvites.invite_history")}</h2>
             <p className="text-sm text-muted-foreground">
               Review invite status, role, inviter, and any linked join request.
             </p>
@@ -296,12 +297,12 @@ export function CompanyInvites() {
               <table className="min-w-full text-left text-sm">
                 <thead>
                   <tr className="border-b border-border">
-                    <th className="px-5 py-3 font-medium text-muted-foreground">State</th>
-                    <th className="px-5 py-3 font-medium text-muted-foreground">Role</th>
-                    <th className="px-5 py-3 font-medium text-muted-foreground">Invited by</th>
-                    <th className="px-5 py-3 font-medium text-muted-foreground">Created</th>
-                    <th className="px-5 py-3 font-medium text-muted-foreground">Join request</th>
-                    <th className="px-5 py-3 text-right font-medium text-muted-foreground">Action</th>
+                    <th className="px-5 py-3 font-medium text-muted-foreground">{t("companyInvites.state")}</th>
+                    <th className="px-5 py-3 font-medium text-muted-foreground">{t("agents.role")}</th>
+                    <th className="px-5 py-3 font-medium text-muted-foreground">{t("companyInvites.invited_by")}</th>
+                    <th className="px-5 py-3 font-medium text-muted-foreground">{t("companyInvites.created")}</th>
+                    <th className="px-5 py-3 font-medium text-muted-foreground">{t("companyInvites.join_request")}</th>
+                    <th className="px-5 py-3 text-right font-medium text-muted-foreground">{t("companyInvites.action")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -342,7 +343,7 @@ export function CompanyInvites() {
                             Revoke
                           </Button>
                         ) : (
-                          <span className="text-xs text-muted-foreground">Inactive</span>
+                          <span className="text-xs text-muted-foreground">{t("companyInvites.inactive")}</span>
                         )}
                       </td>
                     </tr>

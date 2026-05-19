@@ -4,6 +4,7 @@ import { Link } from "@/lib/router";
 import { ActiveAgentsPanel } from "../components/ActiveAgentsPanel";
 import { EmptyState } from "../components/EmptyState";
 import { useBreadcrumbs } from "../context/BreadcrumbContext";
+import { t } from "@/i18n";
 import { useCompany } from "../context/CompanyContext";
 
 const DASHBOARD_LIVE_RUN_LIMIT = 50;
@@ -39,7 +40,7 @@ export function DashboardLive() {
             <ArrowLeft className="h-3.5 w-3.5" />
             Dashboard
           </Link>
-          <h1 className="mt-2 text-2xl font-semibold tracking-normal text-foreground">Live agent runs</h1>
+          <h1 className="mt-2 text-2xl font-semibold tracking-normal text-foreground">{t("dashboardLive.live_agent_runs")}</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Active runs first, followed by the most recent completed runs.
           </p>
@@ -49,7 +50,7 @@ export function DashboardLive() {
 
       <ActiveAgentsPanel
         companyId={selectedCompanyId}
-        title="Active / recent"
+        title={t("dashboardLive.active_recent")}
         minRunCount={DASHBOARD_LIVE_RUN_LIMIT}
         fetchLimit={DASHBOARD_LIVE_RUN_LIMIT}
         cardLimit={DASHBOARD_LIVE_RUN_LIMIT}
