@@ -59,6 +59,13 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   MoreHorizontal,
   CheckCircle2,
   XCircle,
@@ -705,6 +712,15 @@ export function AgentDetail() {
   const agentLookupRef = agent?.id ?? routeAgentRef;
   const resolvedAgentId = agent?.id ?? null;
 
+  const updateLanguage = useMutation({
+    mutationFn: (lang: string) => agentsApi.update(agent?.id ?? routeAgentRef, { language: lang }, resolvedCompanyId ?? undefined),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.agents.detail(agent?.id ?? routeAgentRef) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.agents.detail(agent?.urlKey ?? routeAgentRef) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.agents.list(agent?.companyId ?? "") });
+    },
+  });
+
   const { data: runtimeState } = useQuery({
     queryKey: queryKeys.agents.runtimeState(resolvedAgentId ?? routeAgentRef),
     queryFn: () => agentsApi.runtimeState(resolvedAgentId!, resolvedCompanyId ?? undefined),
@@ -1015,10 +1031,25 @@ export function AgentDetail() {
           </AgentIconPicker>
           <div className="min-w-0">
             <h2 className="text-2xl font-bold truncate">{agent.name}</h2>
-            <p className="text-sm text-muted-foreground truncate">
-              {roleLabels[agent.role] ?? agent.role}
-              {agent.title ? ` - ${agent.title}` : ""}
-            </p>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground truncate">
+              <span>
+                {roleLabels[agent.role] ?? agent.role}
+                {agent.title ? ` - ${agent.title}` : ""}
+              </span>
+              <Select
+                value={agent.language ?? "en"}
+                onValueChange={(v) => updateLanguage.mutate(v)}
+              >
+                <SelectTrigger className="h-5 text-[11px] border-none bg-transparent px-1 py-0 w-auto gap-0.5 hover:bg-accent/50">
+                  <SelectValue placeholder="Lang" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="en">EN</SelectItem>
+                  <SelectItem value="zh-CN">中文</SelectItem>
+                  <SelectItem value="ja-JP">日本語</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </div>
         <div className="flex items-center gap-1 sm:gap-2 shrink-0">

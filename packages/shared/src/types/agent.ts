@@ -92,6 +92,7 @@ export interface Agent {
   permissions: AgentPermissions;
   lastHeartbeatAt: Date | null;
   metadata: Record<string, unknown> | null;
+  language?: string;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -14,6 +14,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Shield } from "lucide-react";
 import { cn, agentUrl } from "../lib/utils";
 import { roleLabels } from "../components/agent-config-primitives";
@@ -66,6 +73,7 @@ export function NewAgent() {
   const [name, setName] = useState("");
   const [title, setTitle] = useState("");
   const [role, setRole] = useState("general");
+  const [language, setLanguage] = useState<"en" | "zh-CN" | "ja-JP">("en");
   const [reportsTo, setReportsTo] = useState<string | null>(null);
   const [configValues, setConfigValues] = useState<CreateConfigValues>(defaultCreateValues);
   const [selectedSkillKeys, setSelectedSkillKeys] = useState<string[]>([]);
@@ -152,6 +160,7 @@ export function NewAgent() {
         name,
         effectiveRole,
         title,
+        language,
         reportsTo,
         selectedSkillKeys,
         configValues,
@@ -254,6 +263,17 @@ export function NewAgent() {
             onChange={setReportsTo}
             disabled={isFirstAgent}
           />
+
+          <Select value={language} onValueChange={(v) => setLanguage(v as "en" | "zh-CN" | "ja-JP")}>
+            <SelectTrigger className="h-7 text-xs border-border px-2 py-1 w-auto gap-1">
+              <SelectValue placeholder="Language" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="en">EN</SelectItem>
+              <SelectItem value="zh-CN">中文</SelectItem>
+              <SelectItem value="ja-JP">日本語</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         {/* Shared config form */}
