@@ -21,8 +21,25 @@ function detectLang(): string {
   return "en";
 }
 
-const currentLang = detectLang();
-const currentLocale = locales[currentLang as keyof typeof locales] ?? en;
+let currentLang = detectLang();
+let currentLocale = locales[currentLang as keyof typeof locales] ?? en;
+
+export function setLanguage(lang: string): boolean {
+  const target = lang.toLowerCase();
+  if (target in locales) {
+    currentLang = target;
+    currentLocale = locales[target as keyof typeof locales] ?? en;
+    return true;
+  }
+  // Try base language without region
+  const base = target.split("-")[0];
+  if (base in locales) {
+    currentLang = base;
+    currentLocale = locales[base as keyof typeof locales] ?? en;
+    return true;
+  }
+  return false;
+}
 
 export function t(key: I18nKey, vars?: Record<string, string | number>): string {
   let text = currentLocale[key] ?? en[key] ?? key;

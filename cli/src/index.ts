@@ -26,7 +26,7 @@ import { registerWorktreeCommands } from "./commands/worktree.js";
 import { registerPluginCommands } from "./commands/client/plugin.js";
 import { registerClientAuthCommands } from "./commands/client/auth.js";
 import { cliVersion } from "./version.js";
-import { t } from "./i18n/index.js";
+import { t, setLanguage } from "./i18n/index.js";
 
 const program = new Command();
 const DATA_DIR_OPTION_HELP = t("opt_data_dir_help");
@@ -34,9 +34,15 @@ const DATA_DIR_OPTION_HELP = t("opt_data_dir_help");
 program
   .name("paperclipai")
   .description(t("cli_desc"))
-  .version(cliVersion);
+  .version(cliVersion)
+  .option("--lang <lang>", "UI language (en, zh-CN, ja-JP)", "en");
 
-program.hook("preAction", (_thisCommand, actionCommand) => {
+program.hook("preAction", (thisCommand, actionCommand) => {
+  const globalOpts = thisCommand.opts() as { lang?: string };
+  if (globalOpts.lang) {
+    setLanguage(globalOpts.lang);
+  }
+
   const options = actionCommand.optsWithGlobals() as DataDirOptionLike;
   const optionNames = new Set(actionCommand.options.map((option) => option.attributeName()));
   applyDataDirOverride(options, {
