@@ -249,7 +249,7 @@ export function InviteLandingPage() {
   });
 
   const companiesQuery = useQuery({
-    queryKey: queryKeys.companies.all,
+    queryKey: ["companies", "for-invite"],
     queryFn: () => companiesApi.list(),
     enabled: !!sessionQuery.data && !!inviteQuery.data?.companyId,
     retry: false,
@@ -342,7 +342,7 @@ export function InviteLandingPage() {
       const asBootstrap = isBootstrapAcceptancePayload(payload);
       setResult({ kind: asBootstrap ? "bootstrap" : "join", payload });
       await queryClient.invalidateQueries({ queryKey: queryKeys.auth.session });
-      await queryClient.invalidateQueries({ queryKey: queryKeys.companies.all });
+      await queryClient.invalidateQueries({ queryKey: ["companies", "for-invite"] });
       if (invite?.companyId && isApprovedHumanJoinPayload(payload, showsAgentForm)) {
         setSelectedCompanyId(invite.companyId, { source: "manual" });
         navigate("/", { replace: true });
@@ -377,7 +377,7 @@ export function InviteLandingPage() {
       rememberPendingInviteToken(token);
       await queryClient.invalidateQueries({ queryKey: queryKeys.auth.session });
       const companies = await queryClient.fetchQuery({
-        queryKey: queryKeys.companies.all,
+        queryKey: ["companies", "for-invite"],
         queryFn: () => companiesApi.list(),
         retry: false,
       });
