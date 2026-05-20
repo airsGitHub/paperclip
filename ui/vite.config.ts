@@ -3,9 +3,24 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { createUiDevWatchOptions } from "./src/lib/vite-watch";
+import fs from "node:fs";
+
+function copyToServerUiDist(): import("vite").Plugin {
+  return {
+    name: "copy-to-server-ui-dist",
+    closeBundle() {
+      const src = path.resolve(__dirname, "dist");
+      const dest = path.resolve(__dirname, "../server/ui-dist");
+      if (!fs.existsSync(src)) return;
+      fs.rmSync(dest, { recursive: true, force: true });
+      fs.cpSync(src, dest, { recursive: true });
+      console.log(`[copy-to-server-ui-dist] copied dist to ${dest}`);
+    },
+  };
+}
 
 export default defineConfig(({ mode }) => ({
-  plugins: [react(), tailwindcss()],
+  plugins: [react(), tailwindcss(), copyToServerUiDist()],
   build: {
     minify: "esbuild",
   },
