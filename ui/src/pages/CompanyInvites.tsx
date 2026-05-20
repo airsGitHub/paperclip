@@ -64,9 +64,22 @@ export function CompanyInvites() {
 
   async function copyInviteUrl(url: string) {
     try {
-      if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
+      if (navigator.clipboard && window.isSecureContext) {
         await navigator.clipboard.writeText(url);
         return true;
+      }
+      // Fallback for non-secure contexts (e.g. HTTP on non-localhost)
+      const textarea = document.createElement("textarea");
+      textarea.value = url;
+      textarea.style.position = "fixed";
+      textarea.style.left = "-9999px";
+      document.body.appendChild(textarea);
+      try {
+        textarea.select();
+        const success = document.execCommand("copy");
+        if (success) return true;
+      } finally {
+        document.body.removeChild(textarea);
       }
     } catch {
       // Fall through to the unavailable message below.

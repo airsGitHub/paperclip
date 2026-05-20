@@ -42,7 +42,14 @@ function CompanyAwareBreadcrumbProvider({ children }: { children: React.ReactNod
   return <BreadcrumbProvider companyName={selectedCompany?.name ?? null}>{children}</BreadcrumbProvider>;
 }
 
-createRoot(document.getElementById("root")!).render(
+const rootElement = document.getElementById("root")!;
+let root = (rootElement as any).__reactRoot;
+if (!root) {
+  root = createRoot(rootElement);
+  (rootElement as any).__reactRoot = root;
+}
+
+root.render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
@@ -73,3 +80,10 @@ createRoot(document.getElementById("root")!).render(
     </QueryClientProvider>
   </StrictMode>
 );
+
+if (import.meta.hot) {
+  import.meta.hot.dispose(() => {
+    root.unmount();
+    delete (rootElement as any).__reactRoot;
+  });
+}
